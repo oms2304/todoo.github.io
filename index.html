@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Corrected CSS file path -->
+
+    <!-- Include Email.js library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="todo-app">
+            <h2>To-Do List <img src="images/icon.png"></h2>
+            <div class="row">
+                <input type="text" id="input-box" placeholder="Type Here">
+                <button class="button" onclick="addTask()">Add</button>
+            </div>
+            <ul id="list-container" onclick="toggleTask(event)">
+                <!-- Your to-do list items will be added here dynamically -->
+            </ul>
+        </div>
+
+        <div class="newcontainer">
+            <div class="sendemails">
+                <h2>Choose when to send the List</h2>
+                <div class="row">
+                    <form id="emailForm">
+                        <input type="time" id="userTime">
+                        <button type="button" class="buto" onclick="setTime()">Set Time</button>
+                    </form>
+                </div>
+                <div class ="row">
+                    <input type="date" id="userdate">
+                        <button type="button" class="buto1" onclick="setDate()">Set Date</button>
+
+                </div>
+                <h2>Enter Your Email</h2>
+                <div class="row">
+                    <input type="email" id="email" name="email" required placeholder="Type Here">
+                    <button type="button" class="newbut" onclick="saveEmail()">Save Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Define a global variable for the to-do list array
+        var todoItems = [];
+
+        function addTask() {
+            var inputbox = document.getElementById("input-box");
+            var listcontainer = document.getElementById("list-container");
+
+            if (inputbox.value === '') {
+                alert("FIND SOMETHING TO DO");
+            } else {
+                let li = document.createElement("li");
+                li.innerHTML = inputbox.value;
+                listcontainer.appendChild(li);
+
+                // Add a delete button (cross) to each new list item
+                var span = document.createElement("span");
+                span.innerHTML = "\u00d7";
+                span.className = "delete-button";
+                li.appendChild(span);
+
+                todoItems.push({ task: inputbox.value, crossed: false });
+                saveData();
+            }
+
+            inputbox.value = '';
+        }
+
+        function toggleTask(event) {
+            if (event.target.tagName === "LI") {
+                event.target.classList.toggle("checked");
+
+                // Find the corresponding task in the todoItems array and update its crossed status
+                var taskIndex = todoItems.findIndex(item => item.task === event.target.textContent);
+                if (taskIndex !== -1) {
+                    todoItems[taskIndex].crossed = !todoItems[taskIndex].crossed;
+                    saveData();
+                }
+            } else if (event.target.classList.contains("delete-button")) {
+                // Delete the parent list item when the delete button is clicked
+                var listItem = event.target.parentElement;
+                listItem.remove();
+
+                // Remove the corresponding task from the todoItems array
+                var taskIndex = todoItems.findIndex(item => item.task === listItem.textContent);
+                if (taskIndex !== -1) {
+                    todoItems.splice(taskIndex, 1);
+                    saveData();
+                }
+            }
+        }
+
+        function sendEmail(emailInput) {
+            // Filter out crossed-out items from the to-do list
+            var filteredTodoItems = todoItems.filter(item => !item.crossed);
+
+            // Join the filtered to-do list array into a string with line breaks
+            var todoListString = filteredTodoItems.map(item => item.task).join("\n");
+
+            // Set up parameters for Email.js
+            var params = {
+                sendername: "Your Name",
+                to: emailInput,
+                subject: "To-Do List",
+                replyto: "", // You can add a reply-to email if needed
+                message: "Here is your to-do list:\n\n" + todoListString,
+            };
+
+            // Set up service and template IDs from your Email.js account
+            var serviceID = "service_v5cc2fs";
+            var templateID = "template_90nxjul";
+
+            // Send the email
+            emailjs.send(serviceID, templateID, params)
+                .then(res => {
+                    alert("To-Do List Sent");
+                })
+                .catch(error => {
+                    console.error("Error sending to-do list:", error);
+                });
+        }
+
+        function saveData() {
+            localStorage.setItem("data", JSON.stringify(todoItems));
+        }
+
+        function showTask() {
+            var listcontainer = document.getElementById("list-container");
+            var storedData = localStorage.getItem("data");
+
+            if (storedData) {
+                todoItems = JSON.parse(storedData);
+                todoItems.forEach(function (item) {
+                    var li = document.createElement("li");
+                    li.innerHTML = item.task;
+
+                    // Add a delete button (cross) to each saved list item
+                    var span = document.createElement("span");
+                    span.innerHTML = "\u00d7";
+                    span.className = "delete-button";
+                    li.appendChild(span);
+
+                    // Check if the task was crossed and apply the style
+                    if (item.crossed) {
+                        li.classList.add("checked");
+                    }
+
+                    listcontainer.appendChild(li);
+                });
+            }
+        }
+
+        showTask();
+
+        // Check if the page is being refreshed and clear local storage if true
+        window.onload = function() {
+            if (performance.navigation.type === 1) {
+                localStorage.removeItem("data");
+            }
+        };
+
+        function saveEmail() {
+            var emailInput = document.getElementById('email').value;
+            localStorage.setItem('savedEmail', emailInput);
+            alert("Email saved successfully!");
+        }
+
+        // Function to save selected time to local storage
+        function setTime() {
+            var selectedTime = document.getElementById('userTime').value;
+            localStorage.setItem('selectedTime', selectedTime);
+            alert("Time set successfully!");
+        }
+
+        // Function to check if the scheduled time matches the current time and send email if matched
+        function checkDateTimeAndSendEmail() {
+            var current = new Date();
+            var currentHours = current.getHours();
+            var currentMinutes = current.getMinutes();
+
+            // Retrieve saved time and email from local storage
+            var savedTime = localStorage.getItem('selectedTime');
+            var savedEmail = localStorage.getItem('savedEmail');
+
+            // Check if saved time and email exist
+            if (savedTime && savedEmail) {
+                var selectedHours = parseInt(savedTime.split(':')[0], 10);
+                var selectedMinutes = parseInt(savedTime.split(':')[1], 10);
+
+                // Check if the current time matches the scheduled time
+                if (currentHours === selectedHours && currentMinutes === selectedMinutes) {
+                    sendEmail(savedEmail); // Send the email
+                }
+            }
+        }
+
+        // Set interval to check the time and send email
+        setInterval(checkDateTimeAndSendEmail, 60000); // Check every minute
+
+        // Function to populate email and time fields with stored values on page load
+        window.onload = function() {
+            var savedEmail = localStorage.getItem('savedEmail');
+            var savedTime = localStorage.getItem('selectedTime');
+
+            if (savedEmail) {
+                document.getElementById('email').value = savedEmail;
+            }
+
+            if (savedTime) {
+                document.getElementById('userTime').value = savedTime;
+            }
+        };
+    </script>
+    </script>
+
+</body>
+</html>
+

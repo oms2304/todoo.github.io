@@ -1,0 +1,222 @@
+*{ /* this targets all elements on the wbsite. (*) is called a wildcard selector */
+    margin:0;
+    padding:0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+.container{ /*this is for the background of the website the blue and purple*/
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(180deg,rgb(145, 1, 255), rgb(49, 0, 171)); /*#153677,#4e085f*/
+    padding: 10px;
+}
+.todo-app{
+    width:100%;
+    max-width:540px;
+    background: #fff;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;  /* border radius in pixels is wayyyy better than in percentage */
+    
+}
+.todo-app h2{
+    color: #002765;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+}
+.todo-app h2 img{ /* this edits the image we added so it goes todo-app/h2/img */
+    width: 30px; /* edit image size */
+    margin-left: 10px;
+}
+.row { /* row would be the entire area witht the grey background, input box and button */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 30px; /* makes the grey box corners round */
+    padding-left: 20px; /* adds space between the border of row and the input box */
+    margin-bottom: 25px;
+}
+.row input{
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent; /* makes input box invisible */
+    padding: 10px;
+}
+.row button{
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: rgb(237, 10, 55);
+    color: #edeef0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+ul li{
+    list-style: none;
+    font-size: 17px;
+    padding: 16px 8px 12px 50px;
+    user-select: none; /* prevents user from interacting with the text (ie copying) */
+    cursor: pointer;
+    position: relative;
+}
+ul li::before{
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    background-image: url(images/unchecked.png);
+    background-size: cover;
+    background-position: center;
+    top: 12px;
+    left: 8px;
+
+}
+ul li.checked{ /* added (.) before container as checked is inside li's <> */
+    color: #555;
+    text-decoration: line-through;
+
+}
+ul li.checked::before{
+    background-image: url(images/checked.png);
+}
+ul li span{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    font-size:22px;
+    color: #555;
+    line-height: 40px;
+    text-align: center;
+}
+ul li span:hover{
+    background: #edeef0;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 50%;
+}
+
+.newcontainer{
+    width: 100%;
+    max-width: 540px;
+    background: #fff;
+    margin: 30px auto 20px;
+    padding: 40px 30px 40px;
+    border-radius: 10px;
+}
+
+.newcontainer h2{
+    font-size: 140%;
+    color: #002765;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    margin-top:5px;
+
+
+}
+.newcontainer .row {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 30px;
+    padding-left: 20px;
+    margin-bottom: 25px;
+}
+
+.newcontainer input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.newbut {
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: #ff5945;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 40px;
+    margin-left: 106px; /* Adjust the margin value as needed */
+}
+
+.newcontainer2{
+    width: 100%;
+    max-width: 540px;
+    background: #fff;
+    margin: 30px auto 20px;
+    padding: 40px 30px 40px;
+    border-radius: 10px;
+}
+
+.newcontainer2 h2{
+    font-size: 140%;
+    color: #002765;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    margin-top:5px;
+
+
+}
+.newcontainer2 .row {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 30px;
+    padding-left: 20px;
+    margin-bottom: 25px;
+}
+
+.newcontainer2 input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.buto {
+
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: #ff5945;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 40px;
+    margin-left: 181px;
+}
+
+.buto1 {
+
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: #ff5945;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 40px;
+    margin-left: 15px;
+}
