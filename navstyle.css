@@ -1,0 +1,28 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-align: center; /* Center the text */
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    background-color: #0c151c;
+}
+
+li {
+float: left;
+align-items: center;
+}
+
+li a {
+align-items: center;
+display: block;
+color: white;
+padding: 14px 16px;
+text-decoration: none;
+}
+
+li a:hover {
+    text-decoration: none; /* Remove underline when hovering */
+    background-color: rgb(35, 35, 42);
+}
